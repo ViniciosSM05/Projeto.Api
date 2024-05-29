@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Dapper.Contrib.Extensions;
 using Projeto.Api.DataAccess.Base;
+using Projeto.Api.DTO;
 using Projeto.Api.Model;
 
 namespace Projeto.Api.DataAccess
@@ -50,6 +51,41 @@ namespace Projeto.Api.DataAccess
         {
             using var conexao = GetConnection();
             return conexao.Execute("DELETE FROM doacao WHERE id = @id", new { id });
+        }
+
+        public IEnumerable<DoacaoPorAnuncioDTO> GetDoacoesPorAnuncio()
+        {
+            using var conexao = GetConnection();
+            return conexao.Query<DoacaoPorAnuncioDTO>(@"
+                SELECT
+                    a.titulo AS Titulo,
+                    SUM(d.valor) AS TotalDoado
+                FROM
+                    anuncio a
+                    JOIN doacao d ON a.id = d.anuncio_id
+                GROUP BY
+                    a.titulo
+                ORDER BY
+                    TotalDoado DESC
+            ");
+        }
+
+        public IEnumerable<DoacaoPorUsuarioDTO> GetDoacoesPorUsuario()
+        {
+            using var conexao = GetConnection();
+            return conexao.Query<DoacaoPorUsuarioDTO>(@"
+                SELECT
+                    u.nome AS Nome,
+                    SUM(d.valor) AS TotalDoado
+                FROM
+                    usuario u
+                    JOIN anuncio a ON u.id = a.usuario_id
+                    JOIN doacao d ON a.id = d.anuncio_id
+                GROUP BY
+                    Nome
+                ORDER BY
+                    TotalDoado DESC
+            ");
         }
     }
 }
