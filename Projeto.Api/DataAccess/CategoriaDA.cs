@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Dapper.Contrib.Extensions;
 using Projeto.Api.DataAccess.Base;
+using Projeto.Api.DTO;
 using Projeto.Api.Model;
 
 namespace Projeto.Api.DataAccess
@@ -38,6 +39,23 @@ namespace Projeto.Api.DataAccess
         {
             using var conexao = GetConnection();
             return conexao.Execute("DELETE FROM categoria WHERE id = @id", new { id });
+        }
+
+        public IEnumerable<AnuncioPorCategoriaDTO> GetAnunciosPorCategoria()
+        {
+            using var conexao = GetConnection();
+            return conexao.Query<AnuncioPorCategoriaDTO>(@"
+	            SELECT
+		            c.nome AS Categoria,
+		            COUNT(a.id) AS TotalAnuncio
+	            FROM
+		            categoria c
+		            LEFT JOIN anuncio a ON c.id = a.categoria_id
+	            GROUP BY
+		            c.nome
+	            ORDER BY
+		            TotalAnuncio DESC 
+            ");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Dapper.Contrib.Extensions;
 using Projeto.Api.DataAccess.Base;
+using Projeto.Api.DTO;
 using Projeto.Api.Model;
 
 namespace Projeto.Api.DataAccess
@@ -61,6 +62,24 @@ namespace Projeto.Api.DataAccess
         {
             using var conexao = GetConnection();
             return conexao.Execute("DELETE FROM usuario WHERE id = @id", new { id });
+        }
+
+        public IEnumerable<UsuarioPorCidadeDTO> GetUsuariosPorCidade()
+        {
+            using var conexao = GetConnection();
+            return conexao.Query<UsuarioPorCidadeDTO>(@"
+                SELECT
+                    ci.nome AS Cidade,
+                    COUNT(u.id) AS TotalUsuario
+                FROM
+                    usuario u
+                    JOIN endereco_usuario eu ON u.id = eu.usuario_id
+                    JOIN cidade ci ON eu.cidade_id = ci.id
+                GROUP BY
+                    ci.nome
+                ORDER BY
+                    TotalUsuario DESC
+            ");
         }
     }
 }
