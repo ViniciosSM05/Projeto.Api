@@ -8,13 +8,13 @@ namespace Projeto.Api.DataAccess
 {
     public class CategoriaDA(IConfiguration config) : BaseDA(config)
     {
-        public IEnumerable<AnuncioPorCategoria> GetAll()
+        public IEnumerable<Categoria> GetAll()
         {
             using var conexao = GetConnection();
-            return conexao.GetAll<AnuncioPorCategoria>();    
+            return conexao.GetAll<Categoria>();    
         }
 
-        public AnuncioPorCategoria Add(AnuncioPorCategoria categoria)
+        public Categoria Add(Categoria categoria)
         {
             using var conexao = GetConnection();
             conexao.Execute("INSERT INTO categoria(id, nome) VALUES(@id, @nome)", new {
@@ -24,7 +24,7 @@ namespace Projeto.Api.DataAccess
             return categoria;  
         }
 
-        public AnuncioPorCategoria Update(AnuncioPorCategoria categoria)
+        public Categoria Update(Categoria categoria)
         {
             using var conexao = GetConnection();
             conexao.Execute("UPDATE categoria SET nome = @nome WHERE id = @id", new
