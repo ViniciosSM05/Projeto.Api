@@ -81,5 +81,49 @@ namespace Projeto.Api.DataAccess
                     TotalUsuario DESC
             ");
         }
+
+        public IEnumerable<UsuarioComEnderecosDTO> GetQtdeEnderecosPorUsuario()
+        {
+            using var conexao = GetConnection();
+            return conexao.Query<UsuarioComEnderecosDTO>(@"
+                SELECT 
+                    u.nome AS NomeUsuario,
+                    MAX(c.nome) AS NomeCidade,
+                    uf.sigla AS Sigla,
+                    COUNT(eu.id) AS TotalEnderecos
+                FROM 
+                    usuario u
+                LEFT OUTER JOIN 
+                    endereco_usuario eu ON u.id = eu.usuario_id
+                LEFT OUTER JOIN 
+                    cidade c ON eu.cidade_id = c.id
+                LEFT OUTER JOIN 
+                    uf ON c.uf = uf.sigla
+                GROUP BY 
+                    u.id, uf.sigla
+                ORDER BY 
+                    TotalEnderecos DESC
+            ");
+        }
+
+        public IEnumerable<MediaDoacoesDTO> GetMediaDoacoes()
+        {
+            using var conexao = GetConnection();
+            return conexao.Query<MediaDoacoesDTO>(@"
+                SELECT 
+                    u.nome AS Usuario,
+                    AVG(d.valor) AS Media
+                FROM 
+                    usuario u
+                LEFT OUTER JOIN 
+                    anuncio a ON u.id = a.usuario_id
+                LEFT OUTER JOIN 
+                    doacao d ON a.id = d.anuncio_id
+                GROUP BY 
+                    u.id
+                ORDER BY 
+                    Media DESC
+                ");
+        }
     }
 }

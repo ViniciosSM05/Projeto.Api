@@ -27,5 +27,13 @@ namespace Projeto.Api.Controllers
         [HttpGet]
         [Route("DoacoesPorUsuario")]
         public IEnumerable<DoacaoPorUsuarioDTO> GetDoacoesPorUsuario() => new DoacaoDA(config).GetDoacoesPorUsuario();
+
+        [HttpGet]
+        [Route("QuantidadeEnderecoPorUsuario")]
+        public IEnumerable<UsuarioComEnderecosDTO> GetUsuarioComEnderecos() => new UsuarioDA(config).GetQtdeEnderecosPorUsuario();
+
+        [HttpGet]
+        [Route("MediaDeDoacoesPorUsuario")]
+        public IEnumerable<MediaDoacoesDTO> GetMediaDoacoes() => new UsuarioDA(config).GetMediaDoacoes();
     }
 }
