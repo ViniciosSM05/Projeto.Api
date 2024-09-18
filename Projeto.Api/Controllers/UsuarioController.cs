@@ -23,7 +23,7 @@ namespace Projeto.Api.Controllers
             {
                 if (string.IsNullOrEmpty(usuario.Nome)) throw new Exception("Nome é obrigatório");
                 if (string.IsNullOrEmpty(usuario.Cpfcnpj)) throw new Exception("Documento é obrigatório");
-                if (string.IsNullOrEmpty(usuario.Senha)) throw new Exception("Documento é obrigatório");
+                if (string.IsNullOrEmpty(usuario.Senha)) throw new Exception("Senha é obrigatória");
 
                 return new UsuarioDA(config).Add(usuario);
             });
