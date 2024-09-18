@@ -1,31 +1,39 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Projeto.Api.Controllers.Base;
 using Projeto.Api.DataAccess;
 using Projeto.Api.DTO;
 
 namespace Projeto.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
-    public class RelatorioController(IConfiguration config) : ControllerBase
+    public class RelatorioController(IConfiguration config) : BaseController
     {
         [HttpGet]
         [Route("DoacoesPorAnuncio")]
-        public IEnumerable<DoacaoPorAnuncioDTO> GetDoacoesPorAnuncio() => new DoacaoDA(config).GetDoacoesPorAnuncio();
+        public ActionResult<ResultDataDTO<IEnumerable<DoacaoPorAnuncioDTO>>> GetDoacoesPorAnuncio()
+            => Execute(() => new DoacaoDA(config).GetDoacoesPorAnuncio());
 
         [HttpGet]
         [Route("AnunciosPorCategoria")]
-        public IEnumerable<AnuncioPorCategoriaDTO> GetAnunciosPorCategoria() => new CategoriaDA(config).GetAnunciosPorCategoria();
+        public ActionResult<ResultDataDTO<IEnumerable<AnuncioPorCategoriaDTO>>> GetAnunciosPorCategoria()
+            => Execute(() => new CategoriaDA(config).GetAnunciosPorCategoria());
 
         [HttpGet]
         [Route("UsuariosPorCidade")]
-        public IEnumerable<UsuarioPorCidadeDTO> GetUsuariosPorCidade() => new UsuarioDA(config).GetUsuariosPorCidade();
+        public ActionResult<ResultDataDTO<IEnumerable<UsuarioPorCidadeDTO>>> GetUsuariosPorCidade()
+            => Execute(() => new UsuarioDA(config).GetUsuariosPorCidade());
 
         [HttpGet]
         [Route("AnunciosPorData")]
-        public IEnumerable<AnuncioPorDataDTO> GetAnunciosPorData() => new AnuncioDA(config).GetAnunciosPorData();
+        public ActionResult<ResultDataDTO<IEnumerable<AnuncioPorDataDTO>>> GetAnunciosPorData()
+            => Execute(() => new AnuncioDA(config).GetAnunciosPorData());
 
         [HttpGet]
         [Route("DoacoesPorUsuario")]
-        public IEnumerable<DoacaoPorUsuarioDTO> GetDoacoesPorUsuario() => new DoacaoDA(config).GetDoacoesPorUsuario();
+        public ActionResult<ResultDataDTO<IEnumerable<DoacaoPorUsuarioDTO>>> GetDoacoesPorUsuario()
+            => Execute(() => new DoacaoDA(config).GetDoacoesPorUsuario());
     }
 }

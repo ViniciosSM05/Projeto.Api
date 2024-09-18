@@ -1,23 +1,31 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Projeto.Api.Controllers.Base;
 using Projeto.Api.DataAccess;
+using Projeto.Api.DTO;
 using Projeto.Api.Model;
 
 namespace Projeto.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
-    public class UfController(IConfiguration config) : ControllerBase
+    public class UfController(IConfiguration config) : BaseController
     {
         [HttpGet(Name = "GetUfs")]
-        public IEnumerable<Uf> Get() => new UfDA(config).GetAll();
+        public ActionResult<ResultDataDTO<IEnumerable<Uf>>> Get()
+            => Execute(() => new UfDA(config).GetAll());
 
         [HttpPost(Name = "AddUf")]
-        public Uf Add(Uf uf) => new UfDA(config).Add(uf);
+        public ActionResult<ResultDataDTO<Uf>> Add(Uf uf)
+            => Execute(() => new UfDA(config).Add(uf));
 
         [HttpPut(Name = "UpdateUf")]
-        public Uf Update(Uf uf) => new UfDA(config).Update(uf);
+        public ActionResult<ResultDataDTO<Uf>> Update(Uf uf)
+            => Execute(() => new UfDA(config).Update(uf));
 
         [HttpDelete(Name = "DeleteUf")]
-        public int Delete(string sigla) => new UfDA(config).Delete(sigla);
+        public ActionResult<ResultDataDTO<int>> Delete(string sigla)
+            => Execute(() => new UfDA(config).Delete(sigla));
     }
 }

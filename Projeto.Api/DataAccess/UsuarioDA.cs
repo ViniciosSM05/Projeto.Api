@@ -81,5 +81,23 @@ namespace Projeto.Api.DataAccess
                     TotalUsuario DESC
             ");
         }
+
+        public Usuario GetUsuarioPorEmailESenha(string email, string senha)
+        {
+            using var conexao = GetConnection();
+            return conexao.QueryFirstOrDefault<Usuario>(@"
+                SELECT
+                    id,
+                    nome, 
+                    cpfcnpj,
+                    email,
+                    senha,
+                    celular,
+                    data_nascimento
+                FROM
+                    usuario
+                WHERE email = @email AND senha = @senha 
+            ", new { email, senha });
+        }
     }
 }
