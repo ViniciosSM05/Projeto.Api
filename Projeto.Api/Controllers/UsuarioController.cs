@@ -12,10 +12,20 @@ namespace Projeto.Api.Controllers
     [Route("[controller]")]
     public class UsuarioController(IConfiguration config) : BaseController
     {
+        /// <summary>
+        /// Obtém uma lista de objetos de usuários
+        /// </summary>
+        /// <returns></returns>
         [HttpGet(Name = "GetUsuarios")]
         public ActionResult<ResultDataDTO<IEnumerable<Usuario>>> Get() 
             => Execute(() => new UsuarioDA(config).GetAll());
 
+        /// <summary>
+        /// Inclui um novo usuário
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [AllowAnonymous]
         [HttpPost(Name = "AddUsuario")]
         public ActionResult<ResultDataDTO<Usuario>> Add(Usuario usuario)
@@ -28,10 +38,20 @@ namespace Projeto.Api.Controllers
                 return new UsuarioDA(config).Add(usuario);
             });
 
+        /// <summary>
+        /// Atualiza um usuário
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <returns></returns>
         [HttpPut(Name = "UpdateUsuario")]
         public ActionResult<ResultDataDTO<Usuario>> Update(Usuario usuario)
             => Execute(() => new UsuarioDA(config).Update(usuario));
 
+        /// <summary>
+        /// Deleta um usuário
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete(Name = "DeleteUsuario")]
         public ActionResult<ResultDataDTO<int>> Delete(Guid id)
             => Execute(() => new UsuarioDA(config).Delete(id));
